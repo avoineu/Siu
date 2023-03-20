@@ -1,6 +1,6 @@
 import socket
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host, port =('localhost', 6666)
+host, port =('localhost', 3000)
 
 try :
     s.connect((host,port))
