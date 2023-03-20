@@ -7,7 +7,7 @@ try :
     print("le client arrive...")
     s.listen('')
 
-    data = 'ca marche le reuf'
+    data = {"request": "subsrcibe", "port": "3000", "name": "avoineu", "matricules": [21160]}
     data = data.encode("utf8")
     s.sendall(data)
 
@@ -15,4 +15,5 @@ except ConnectionRefusedError :
     print("ERREUR")
 
 finally :
+    s.recvfrom(2048)
     s.close()
