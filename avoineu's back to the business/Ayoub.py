@@ -5,6 +5,7 @@ host, port =('localhost', 3000)
 try :
     s.connect((host,port))
     print("le client arrive...")
+    s.listen('')
 
     data = 'ca marche le reuf'
     data = data.encode("utf8")
