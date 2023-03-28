@@ -14,10 +14,14 @@ request = {
 
 # Création de la socket et envoi de la requête de souscription au serveur
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect(server_address)
-    s.sendall(json.dumps(request).encode())
-    response = s.recv(1024).decode()
-    print(response)
+    s.settimeout(0.5)
+    try:
+        s.connect(server_address)
+        s.sendall(json.dumps(request).encode())
+        response = s.recv(1024).decode()
+        print(response)
+    except socket.timeout:
+        print("Le temps d'attente pour la connexion est trop long !")
 
 # Création de la socket et écoute sur le port de souscription
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -42,3 +46,5 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
         # Fermeture de la connexion
         client_socket.close()
+
+        break #pcq la boucle ne veut pas s'arrêter avec ctrl+c. Pq ?
