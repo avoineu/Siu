@@ -8,7 +8,7 @@ Variable = True
 # Création de la requête de souscription
 request = {
     "request": "subscribe",
-    "port": 8888,
+    "port": 5000,
     "name": "Avoine and Mister_IZ",
     "matricules": ["21160", "20057"]
 }
@@ -27,7 +27,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
 # Création de la socket et écoute sur le port de souscription
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.bind(('localhost', 8888))
+    s.bind(('localhost', 5000))
     s.listen()
 
     while Variable:
