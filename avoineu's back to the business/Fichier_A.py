@@ -55,4 +55,4 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             print("Trop long pour l'accept")
             pass
 
-        Variable = False #pcq la boucle ne veut pas s'arrêter avec ctrl+c. Pq ?
+        Variable = False #Pour arrêter la boucle étant donné qu'on est déja accepé
