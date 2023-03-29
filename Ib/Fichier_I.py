@@ -50,7 +50,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 client_socket.sendall(json.dumps(response).encode())
 
             # Fermeture de la connexion
-            client_socket.close()
+            #client_socket.close()
         except:
             print("Trop long pour l'accept")
             pass
