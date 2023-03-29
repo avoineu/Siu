@@ -54,7 +54,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     client_socket.sendall(json.dumps(response).encode())
 
         except socket.timeout:
-            print("Trop long pour l'accept")
             pass
 
         #Variable = False #Pour arrêter la boucle étant donné qu'on est déja accepé
