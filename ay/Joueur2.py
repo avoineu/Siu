@@ -42,13 +42,12 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             client_socket, client_address = s.accept()
             with client_socket:
                 def reponse() :
-                    chiffre = random.randint(6,8)
-                    toile = message['tile']
-                    toile[0]= message['tile'][3]
-                    toile[1]= message['tile'][0]
-                    toile[2]= message['tile'][1]
-                    toile[3]= message['tile'][2]
-                    jouer = {"tile":toile,"gate":"A" ,"new_position": chiffre}
+                    toile = dict(message['state']['tile'])
+                    toile['N']= message['state']['tile']['W']
+                    toile['E']= message['state']['tile']['N']
+                    toile['S']= message['state']['tile']['E']
+                    toile['W']= message['state']['tile']['S']
+                    jouer = {"tile":toile, "gate":"A", "new_position":1}
                     aenvoyer = {"response":"move", "move":jouer, "message":"on s'en fiche"}
                     client_socket.sendall(json.dumps(aenvoyer).encode())
 
