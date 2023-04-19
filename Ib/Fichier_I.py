@@ -12,7 +12,7 @@ port = int(sys.argv[1])
 request = {
     "request": "subscribe",
     "port": port,
-    "name": "Avoine-{}".format(port),
+    "name": "MisterZ-{}".format(port),
     "matricules": ["21160", "20057", str(port)]
 }
 
