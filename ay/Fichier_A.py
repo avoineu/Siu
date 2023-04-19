@@ -36,7 +36,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
     while Variable:
         s.settimeout(5)
-            
         try: 
             # Acceptation de la connexion entrante
             client_socket, client_address = s.accept()
