@@ -2,6 +2,7 @@ import socket
 import json
 import time
 import sys
+import random
 
 server_address = ('localhost', 3000)
 Variable = True
@@ -56,4 +57,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         except socket.timeout:
             pass
 
-        #Variable = False #Pour arrêter la boucle étant donné qu'on est déja accepé
+        #Variable = False #Pour arrêter la boucle étant donné qu'on est déja accepté
+
+        if data :
+            chiffre = random.randint(6,8)
+            jouer = {"title":"N","gate":"A" ,"new_position": chiffre}
+            client_socket.sendall(json.dumps(jouer).encode())
