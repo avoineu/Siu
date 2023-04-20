@@ -2,6 +2,7 @@ import socket
 import json
 import time
 import sys
+import random
 
 server_address = ('localhost', 3000)
 Variable = True
@@ -12,7 +13,7 @@ port = int(sys.argv[1])
 request = {
     "request": "subscribe",
     "port": port,
-    "name": "MisterZ-{}".format(port),
+    "name": "Avoine-{}".format(port),
     "matricules": ["21160", "20057", str(port)]
 }
 
@@ -35,37 +36,40 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
     while Variable:
         s.settimeout(5)
-
         try: 
             # Acceptation de la connexion entrante
             client_socket, client_address = s.accept()
             with client_socket:
+                def reponse() :
+                    chiffre = random.randint(6,8)
+                    toile = dict(message['state']['tile'])
+                    toile['N']= message['state']['tile']['W']
+                    toile['E']= message['state']['tile']['N']
+                    toile['S']= message['state']['tile']['E']
+                    toile['W']= message['state']['tile']['S']
+                    jouer = {"tile":toile, "gate":"B", "new_position":1}
+                    aenvoyer = {"response":"move", "move":jouer, "message":"kuku"}
+                    client_socket.sendall(json.dumps(aenvoyer).encode())
+
                 print('Connexion de', client_address)
 
                 # Réception du message envoyé par le serveur
-                data = b""
-                # J'ai simplement ajouté une boucle while pour lire le message en plusieurs chunks, 
-                # et j'ai modifié la valeur de la taille des chunks pour être de 2048, afin de réduire la taille des paquets et améliorer la performance.
-                chunk = client_socket.recv(2048)
-                while chunk:
-                    data += chunk
-                    if len(chunk) < 2048:
-                        break
-                    chunk = client_socket.recv(2048)
-
-                print('Reçu', repr(data.decode()))
+                data = client_socket.recv(16000).decode()
+                print('Reçu', repr(data))
 
                 # Analyse du message reçu et envoi de la réponse appropriée
-                message = json.loads(data.decode())
+                message = json.loads(data)
                 if message['request'] == 'ping':
                     response = {"response": "pong"}
                     print(response)
                     client_socket.sendall(json.dumps(response).encode())
+                elif message['request'] == 'play':
+                    reponse()
 
         except socket.timeout:
             pass
 
-        #Variable = False #Pour arrêter la boucle étant donné qu'on est déja accepé
+        #Variable = False #Pour arrêter la boucle étant donné qu'on est déja accepté
 
 
 
