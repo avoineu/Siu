@@ -47,11 +47,19 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     toile['E']= message['state']['tile']['N']
                     toile['S']= message['state']['tile']['E']
                     toile['W']= message['state']['tile']['S']
-                    jouer = {"tile":toile, "gate":"B", "new_position":1}
+                    position_actuelle = message['state']['current']
+                    #print(position_actuelle)
+                    if message['state']['board'][int(position_actuelle)]['N'] == True :
+                        jouer = {"tile":toile, "gate":"B", "new_position":position_actuelle - 7}
+                    elif message['state']['board'][int(position_actuelle)]['E'] == True :
+                        jouer = {"tile":toile, "gate":"B", "new_position":position_actuelle +1}
+                    elif message['state']['board'][int(position_actuelle)]['S'] == True :
+                        jouer = {"tile":toile, "gate":"B", "new_position":position_actuelle + 7}
+                    elif message['state']['board'][int(position_actuelle)]['W'] == True :
+                        jouer = {"tile":toile, "gate":"B", "new_position":position_actuelle - 1}
                     aenvoyer = {"response":"move", "move":jouer, "message":"kuku"}
                     client_socket.sendall(json.dumps(aenvoyer).encode())
-                    position_actuelle = message['state']['current']
-                    print(position_actuelle)
+
 
                 print('Connexion de', client_address)
 
