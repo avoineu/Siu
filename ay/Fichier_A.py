@@ -50,6 +50,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     jouer = {"tile":toile, "gate":"B", "new_position":1}
                     aenvoyer = {"response":"move", "move":jouer, "message":"kuku"}
                     client_socket.sendall(json.dumps(aenvoyer).encode())
+                    position_actuelle = message['state']['current']
+                    print(position_actuelle)
 
                 print('Connexion de', client_address)
 
