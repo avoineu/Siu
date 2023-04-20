@@ -39,6 +39,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             
         try: 
             # Acceptation de la connexion entrante
+            #{"N": false, "E": true, "S": true, "W": true, "item": 18}
             client_socket, client_address = s.accept()
             with client_socket:
                 def reponse() :
