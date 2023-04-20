@@ -4,7 +4,8 @@ import time
 import sys
 import random
 
-server_address = ('localhost', 3000)
+#server_address = ('localhost', 3000) #Pour jouer sur pc local
+server_address = ('172.17.10.59', 3000) #Pour jouer sur serveur prof
 Variable = True
 
 port = int(sys.argv[1])
@@ -13,7 +14,7 @@ port = int(sys.argv[1])
 request = {
     "request": "subscribe",
     "port": port,
-    "name": "Avoine-{}".format(port),
+    "name": "Mister_Z and Avoine-{}".format(port),
     "matricules": ["21160", "20057", str(port)]
 }
 
@@ -64,6 +65,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     print(response)
                     client_socket.sendall(json.dumps(response).encode())
                 elif message['request'] == 'play':
+                    print(message)
                     reponse()
 
         except socket.timeout:
