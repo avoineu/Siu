@@ -4,8 +4,8 @@ import time
 import sys
 import random
 
-#server_address = ('localhost', 3000) #Pour jouer sur pc local
-server_address = ('172.17.10.59', 3000) #Pour jouer sur serveur prof
+server_address = ('localhost', 3000) #Pour jouer sur le pc
+#server_address = ('172.17.10.59', 3000) #Pour jouer sur celui du prof
 Variable = True
 
 port = int(sys.argv[1])
@@ -48,9 +48,11 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     toile['E']= message['state']['tile']['N']
                     toile['S']= message['state']['tile']['E']
                     toile['W']= message['state']['tile']['S']
-                    jouer = {"tile":toile, "gate":"B", "new_position":1}
+                    jouer = {"tile":toile, "gate":"B", "new_position":random.choice('N','E','S','W')}
                     aenvoyer = {"response":"move", "move":jouer, "message":"kuku"}
                     client_socket.sendall(json.dumps(aenvoyer).encode())
+                    position_actuelle = message['state']['current']
+                    print(position_actuelle)
 
                 print('Connexion de', client_address)
 
@@ -65,7 +67,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     print(response)
                     client_socket.sendall(json.dumps(response).encode())
                 elif message['request'] == 'play':
-                    print(message)
                     reponse()
 
         except socket.timeout:
