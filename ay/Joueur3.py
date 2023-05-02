@@ -13,7 +13,7 @@ port = int(sys.argv[1])
 request = {
     "request": "subscribe",
     "port": port,
-    "name": "Ayoubsback-{}".format(port),
+    "name": "Arifsback-{}".format(port),
     "matricules": ["21160", "20057", str(port)]
 }
 
@@ -24,7 +24,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect(server_address)
         s.sendall(json.dumps(request).encode())
         response = s.recv(1024).decode()
-        #print(response)
+        print(response)
     except socket.timeout:
         print("Le temps d'attente pour la connexion est trop long !")
         pass
