@@ -24,7 +24,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect(server_address)
         s.sendall(json.dumps(request).encode())
         response = s.recv(1024).decode()
-        #print(response)
+        print(response)
     except socket.timeout:
         print("Le temps d'attente pour la connexion est trop long !")
         pass
@@ -48,24 +48,16 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     toile['E']= message['state']['tile']['N']
                     toile['S']= message['state']['tile']['E']
                     toile['W']= message['state']['tile']['S']
-                    position_actuelle = int(message['state']['current'])
+                    position_actuelle = int(message['state']['positions'][message['state']['current']])
                     jouer = {"tile":toile, "gate":"B", "new_position":(position_actuelle)}
-                    if message['state']['board'][int(position_actuelle)]['N'] == True :
-                        if position_actuelle >= 7 :
-                            if message['state']['board'][int(position_actuelle - 7)]['S'] == True :
-                                jouer = {"tile":toile, "gate":"B", "new_position":(position_actuelle - 7)}
-                    elif message['state']['board'][int(position_actuelle)]['E'] == True : # a droite
-                        if position_actuelle not in [6,13,20,27,34,41,48] :
-                            if message['state']['board'][int(position_actuelle+1)]['W'] == True :
-                                jouer = {"tile":toile, "gate":"B", "new_position":(position_actuelle +1)}
-                    elif message['state']['board'][int(position_actuelle)]['S'] == True :
-                        if position_actuelle <= 41 :
-                            if message['state']['board'][int(position_actuelle + 7)]['N'] == True :
-                                jouer = {"tile":toile, "gate":"B", "new_position":(position_actuelle + 7)}
-                    elif message['state']['board'][int(position_actuelle)]['W'] == True : #a gauche
-                        if position_actuelle not in [0,7,14,21,28,35,42] :
-                            if message['state']['board'][int(position_actuelle-1)]['E'] == True :
-                                jouer = {"tile":toile, "gate":"B", "new_position":(position_actuelle - 1)}
+                    if message['state']['board'][int(position_actuelle)]['N'] == True and position_actuelle >= 7 and message['state']['board'][int(position_actuelle - 7)]['S'] == True :
+                        jouer = {"tile":toile, "gate":"B", "new_position":(position_actuelle - 7)}
+                    elif message['state']['board'][int(position_actuelle)]['E'] == True and position_actuelle not in [6,13,20,27,34,41,48] and message['state']['board'][int(position_actuelle+1)]['W'] == True: # a droite
+                        jouer = {"tile":toile, "gate":"B", "new_position":(position_actuelle +1)}
+                    elif message['state']['board'][int(position_actuelle)]['S'] == True and position_actuelle <= 41 and message['state']['board'][int(position_actuelle + 7)]['N'] == True  :
+                        jouer = {"tile":toile, "gate":"B", "new_position":(position_actuelle + 7)}
+                    elif message['state']['board'][int(position_actuelle)]['W'] == True and position_actuelle not in [0,7,14,21,28,35,42] and message['state']['board'][int(position_actuelle-1)]['E'] == True : #a gauche
+                        jouer = {"tile":toile, "gate":"B", "new_position":(position_actuelle - 1)}
                     else :
                         jouer = {"tile":toile, "gate":"B", "new_position":(position_actuelle)}
                     aenvoyer = {"response":"move", "move":jouer, "message":"on s'en fiche"}
@@ -85,8 +77,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     client_socket.sendall(json.dumps(response).encode())
                 elif message['request'] == 'play':
                     reponse()
-
         except socket.timeout:
             pass
-
         #Variable = False #Pour arrêter la boucle étant donné qu'on est déja accepté
