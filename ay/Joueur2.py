@@ -78,5 +78,4 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 elif message['request'] == 'play':
                     reponse()
         except socket.timeout:
-            pass
-        #Variable = False #Pour arrêter la boucle étant donné qu'on est déja accepté
+            pass #Variable = False #Pour arrêter la boucle étant donné qu'on est déja accepté
