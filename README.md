@@ -11,8 +11,8 @@ Nous sommes Ayoub Ben Yamoune (21160) et Zian Ibrahim (20057), et ce projet a é
 2. JSON : Étant donné que les messages reçus du serveur sont au format JSON, nous utilisons la bibliothèque JSON pour convertir les objets JSON en objets Python et vice-versa. Cela nous permet d'échanger des informations entre le serveur et notre client de manière efficace.
 
 3. sys : Nous utilisons la bibliothèque sys pour récupérer le numéro de port spécifié lors de l'exécution du script Python correspondant à notre client. Par exemple, la ligne de code suivante extrait le numéro de port : ```python
-port = int(sys.argv[1])
-```  Cette approche nous permet de spécifier différents numéros de port pour exécuter plusieurs instances de notre client et ainsi les faire jouer les uns contre les autres.
+port = int(sys.argv[1])```
+Cette approche nous permet de spécifier différents numéros de port pour exécuter plusieurs instances de notre client et ainsi les faire jouer les uns contre les autres.
 
 4. random : La bibliothèque random nous permet de générer des valeurs aléatoires, ce qui est très utile dans certaines parties de notre logique de jeu. Cela nous permet donc de prendre des décisions aléatoires lorsque plusieurs options sont disponibles auxquelles notre stratégie n'a pas de réponse. Par exemple, nous utilisons la fonction suivante pour décider de la rotation d'une tuile :```python
 def decider_rotation():
