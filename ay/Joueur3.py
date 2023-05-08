@@ -27,7 +27,7 @@ def decider_position(board, position_actuelle):
     elif board[position_actuelle]['S'] == True : 
         if position_actuelle <= 41 and board[position_actuelle+7]['N'] == True :
             destination = position_actuelle +7
-        elif  board[position_actuelle]['S'] == True and position_actuelle > 42 and board[position_actuelle-42]['N'] == True:
+        elif  board[position_actuelle]['S'] == True and position_actuelle > 41 and board[position_actuelle-42]['N'] == True:
             destination = position_actuelle -42
     elif board[position_actuelle]['W'] == True :
         if position_actuelle not in extreme_W and board[position_actuelle-1]['E'] == True :
@@ -78,9 +78,8 @@ def ping_pong():
     print(response)
     return(json.dumps(response))
 
-if __name__ == "__main__" : #permet de se lancer que quand c'est pas importé 
-    server_address = ('localhost', 3000)
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: # Création de la socket et envoi de la requête de souscription au serveur
+def subscribe_to_server(server_address):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.settimeout(5)
         try:
             s.connect(server_address)
@@ -90,23 +89,71 @@ if __name__ == "__main__" : #permet de se lancer que quand c'est pas importé
         except socket.timeout:
             print("Le temps d'attente pour la connexion est trop long !")
             pass
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: # Création de la socket et écoute sur le port de souscription
-        s.bind(('', int(sys.argv[1])))
+
+def process_serveur_message(data):
+    print('Reçu', repr(data))
+    message = json.loads(data)
+    if message['request'] == 'ping':
+        return ping_pong().encode()
+    elif message['request'] == 'play':
+        movement = move(message['state']['tile'], message['state']['board'], int(message['state']['positions'][message['state']['current']]))
+        response = answer(movement)
+        return json.dumps(response).encode()
+
+def start_subscription_server(port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(('', port))
         s.listen()
         while True:
             s.settimeout(5)
             try: 
-                client_socket, client_address = s.accept() # Acceptation de la connexion entrante
+                client_socket, client_address = s.accept()
                 with client_socket:
                     print('Connexion de', client_address)
-                    data = client_socket.recv(16000).decode() # Réception du message envoyé par le serveur
-                    print('Reçu', repr(data))
-                    message = json.loads(data) # Analyse du message reçu et envoi de la réponse appropriée
-                    if message['request'] == 'ping':
-                        client_socket.sendall(ping_pong().encode())
-                    elif message['request'] == 'play':
-                        movement = move(message['state']['tile'],message['state']['board'],int(message['state']['positions'][message['state']['current']]))
-                        message = answer(movement)
-                        client_socket.sendall(json.dumps(message).encode())
+                    data = client_socket.recv(16000).decode()
+                    to_send = process_serveur_message(data)
+                    client_socket.sendall(to_send)
             except socket.timeout:
                 pass
+
+def main():
+    server_address = ('localhost', 3000)
+    subscribe_to_server(server_address)
+    port = int(sys.argv[1])
+    start_subscription_server(port)
+
+if __name__ == "__main__" :
+    main()
+
+# if __name__ == "__main__" : #permet de se lancer que quand c'est pas importé 
+#     server_address = ('localhost', 3000)
+#     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: # Création de la socket et envoi de la requête de souscription au serveur
+#         s.settimeout(5)
+#         try:
+#             s.connect(server_address)
+#             s.sendall(get_request().encode())
+#             response = s.recv(1024).decode()
+#             #print(response)
+#         except socket.timeout:
+#             print("Le temps d'attente pour la connexion est trop long !")
+#             pass
+#     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: # Création de la socket et écoute sur le port de souscription
+#         s.bind(('', int(sys.argv[1])))
+#         s.listen()
+#         while True:
+#             s.settimeout(5)
+#             try: 
+#                 client_socket, client_address = s.accept() # Acceptation de la connexion entrante
+#                 with client_socket:
+#                     print('Connexion de', client_address)
+#                     data = client_socket.recv(16000).decode() # Réception du message envoyé par le serveur
+#                     print('Reçu', repr(data))
+#                     message = json.loads(data) # Analyse du message reçu et envoi de la réponse appropriée
+#                     if message['request'] == 'ping':
+#                         client_socket.sendall(ping_pong().encode())
+#                     elif message['request'] == 'play':
+#                         movement = move(message['state']['tile'],message['state']['board'],int(message['state']['positions'][message['state']['current']]))
+#                         message = answer(movement)
+#                         client_socket.sendall(json.dumps(message).encode())
+#             except socket.timeout:
+#                 pass
