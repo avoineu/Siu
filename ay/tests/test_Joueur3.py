@@ -1,5 +1,6 @@
 import pytest
 import Joueur3 
+import json
 from unittest.mock import patch
 
 def test_decider_gate():
@@ -55,3 +56,22 @@ def test_move():
             "new_position": 1
         }
         assert result == expected_result
+
+def test_get_request():
+    arg_mock = ["Joueur3.py","6666"]
+    expected_result = {
+        "request": "subscribe",
+        "port": 6666,
+        "name": "Avoinesback-6666",
+        "matricules": ["21160","20057"]
+    }
+
+    with patch('Joueur3.sys.argv', arg_mock):
+        result = Joueur3.get_request()
+
+    assert result == json.dumps(expected_result)
+
+def test_ping_pong():
+    result = Joueur3.ping_pong()
+    expected_result = json.dumps({"response": "pong"})
+    assert result == expected_result
