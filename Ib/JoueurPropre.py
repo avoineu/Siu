@@ -4,6 +4,9 @@ import time
 import sys
 import random
 
+from collections import deque
+
+
 def move(tuile, board, position_actuelle) :
     tuile = turn_tuile(tuile,decider_rotation())
     gate = decider_gate()
@@ -55,11 +58,33 @@ def turn_tuile(tuile, number_rotation):
         new_tuile['N'], new_tuile['E'], new_tuile['S'], new_tuile['W'] = new_tuile['W'], new_tuile['N'], new_tuile['E'], new_tuile['S']
     return tuile
 
+def bts_move(board, position_actuelle):
+    tuiles_possibles = [
+        {"N": False, "E": False, "S": True, "W": True},
+        {"N": True, "E": False, "S": True, "W": False},
+        {"N": True, "E": False, "S": False, "W": True},
+        {"N": False, "E": True, "S": True, "W": False},
+        {"N": True, "E": True, "S": False, "W": False},
+        {"N": False, "E": True, "S": False, "W": True}
+        ]
+    directions = ["N", "E", "S", "W"]
+    x, y = position_actuelle
+    for i, tuile in enumerate(tuiles_possibles):
+        if tuile["N"] and y > 0 and board[y-1][x] == 0:
+            return (x, y-1)
+        elif tuile["E"] and x < len(board[0])-1 and board[y][x+1] == 0:
+            return (x+1, y)
+        elif tuile["S"] and y < len(board)-1 and board[y+1][x] == 0:
+            return (x, y+1)
+        elif tuile["W"] and x > 0 and board[y][x-1] == 0:
+            return (x-1, y)
+        return None
+    
 def answer(move):
     message = {
         "response":"move",
         "move":move,
-        "message":"on s'en fiche"
+        "message":"ca bouge"
         }
     client_socket.sendall(json.dumps(message).encode())
 
@@ -70,7 +95,7 @@ if __name__ == "__main__" : #permet de se lancer que quand c'est pas importé
     request = {
         "request": "subscribe",
         "port": port,
-        "name": "Arifsback-{}".format(port),
+        "name": "Je_joue-{}".format(port),
         "matricules": ["21160", "20057", str(port)]
     }
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: # Création de la socket et envoi de la requête de souscription au serveur
