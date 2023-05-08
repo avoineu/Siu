@@ -61,7 +61,7 @@ def answer(move):
         "move":move,
         "message":"on s'en fiche"
         }
-    client_socket.sendall(json.dumps(message).encode())
+    return message 
 
 if __name__ == "__main__" : #permet de se lancer que quand c'est pas importé 
     server_address = ('localhost', 3000)
@@ -101,6 +101,7 @@ if __name__ == "__main__" : #permet de se lancer que quand c'est pas importé
                         client_socket.sendall(json.dumps(response).encode())
                     elif message['request'] == 'play':
                         movement = move(message['state']['tile'],message['state']['board'],int(message['state']['positions'][message['state']['current']]))
-                        answer(movement)
+                        message = answer(movement)
+                        client_socket.sendall(json.dumps(message).encode())
             except socket.timeout:
                 pass
