@@ -2,6 +2,7 @@ import pytest
 import Joueur3 
 import json
 from unittest.mock import patch
+import socket 
 import unittest
 import Joueur3
 
