@@ -2,7 +2,8 @@ import pytest
 import Joueur3 
 import json
 from unittest.mock import patch
-import socket 
+import unittest
+import Joueur3
 
 def test_decider_gate():
     result = Joueur3.decider_gate()
@@ -147,3 +148,11 @@ def test_process_serveur_message_play():
     actual_response = json.loads(str(bang.decode()))
 
     assert actual_response == expected_response
+
+class TestJoueur3(unittest.TestCase):
+
+    @patch('sys.argv', ['Joueur3.py'])  # Mock sys.argv with no command-line arguments
+    def test_main_missing_argument(self):
+        # Execute the main function
+        with self.assertRaises(IndexError):
+            Joueur3.main()
