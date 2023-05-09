@@ -59,7 +59,7 @@ def answer(move):
     message = {
         "response":"move",
         "move":move,
-        "message":"on s'en fiche"
+        "message":"quoicouwhat"
         }
     return message 
 
@@ -98,6 +98,7 @@ def process_serveur_message(data):
     elif message['request'] == 'play':
         movement = move(message['state']['tile'], message['state']['board'], int(message['state']['positions'][message['state']['current']]))
         response = answer(movement)
+        print('VOICI MON ANSWER   ', json.dumps(response))
         return json.dumps(response).encode()
 
 def start_subscription_server(port):
