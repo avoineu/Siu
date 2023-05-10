@@ -19,30 +19,57 @@ def move(tuile, board, position_actuelle) :
     return jouer
 
 def decider_position(board, position_actuelle):
-    destination = position_actuelle
-    extreme_W = [0,7,14,21,28,35,42]
-    extreme_E = [6,13,20,27,34,41,48]
-    if board[position_actuelle]['N'] == True :
-        if position_actuelle >= 7 and board[position_actuelle-7]['S'] == True :
-            destination = position_actuelle -7
-        elif position_actuelle < 7 and board[position_actuelle+42]['S'] == True :
-            destination = position_actuelle +42
-    elif board[position_actuelle]['S'] == True : 
-        if position_actuelle <= 41 and board[position_actuelle+7]['N'] == True :
-            destination = position_actuelle +7
-        elif  board[position_actuelle]['S'] == True and position_actuelle > 42 and board[position_actuelle-42]['N'] == True:
-            destination = position_actuelle -42
-    elif board[position_actuelle]['W'] == True :
-        if position_actuelle not in extreme_W and board[position_actuelle-1]['E'] == True :
-            destination = position_actuelle -1
-        elif position_actuelle in extreme_W and board[position_actuelle+6]['E'] == True:
-            destination = position_actuelle +6
-    elif board[position_actuelle]['E'] == True :
-        if position_actuelle not in extreme_E and board[position_actuelle+1]['W'] == True :
-            destination = position_actuelle +1
-        elif position_actuelle in extreme_E and board[position_actuelle-6]['W'] == True:
-            destination = position_actuelle  -6
-    return destination
+    directions = ['N', 'E', 'S', 'W']
+    random.shuffle(directions)
+    for direction in directions:
+        if board[position_actuelle][direction] and not is_wall(position_actuelle, direction):
+            if direction == 'N':
+                return position_actuelle - 7
+            elif direction == 'E':
+                return position_actuelle + 1
+            elif direction == 'S':
+                return position_actuelle + 7
+            elif direction == 'W':
+                return position_actuelle - 1
+    return position_actuelle  # ne bouge pas si toutes les directions sont bloquées par des murs
+
+
+def is_wall(position, direction):
+    if direction == 'N' and position < 7:
+        return True
+    elif direction == 'E' and position % 7 == 6:
+        return True
+    elif direction == 'S' and position > 41:
+        return True
+    elif direction == 'W' and position % 7 == 0:
+        return True
+    return False
+
+# def decider_position(board, position_actuelle):
+#     destination = position_actuelle
+#     extreme_W = [0,7,14,21,28,35,42]
+#     extreme_E = [6,13,20,27,34,41,48]
+#     if board[position_actuelle]['N'] == True :
+#         if position_actuelle >= 7 and board[position_actuelle-7]['S'] == True :
+#             destination = position_actuelle -7
+#         elif position_actuelle < 7 and board[position_actuelle+42]['S'] == True :
+#             destination = position_actuelle +42
+#     elif board[position_actuelle]['S'] == True : 
+#         if position_actuelle <= 41 and board[position_actuelle+7]['N'] == True :
+#             destination = position_actuelle +7
+#         elif  board[position_actuelle]['S'] == True and position_actuelle > 42 and board[position_actuelle-42]['N'] == True:
+#             destination = position_actuelle -42
+#     elif board[position_actuelle]['W'] == True :
+#         if position_actuelle not in extreme_W and board[position_actuelle-1]['E'] == True :
+#             destination = position_actuelle -1
+#         elif position_actuelle in extreme_W and board[position_actuelle+6]['E'] == True:
+#             destination = position_actuelle +6
+#     elif board[position_actuelle]['E'] == True :
+#         if position_actuelle not in extreme_E and board[position_actuelle+1]['W'] == True :
+#             destination = position_actuelle +1
+#         elif position_actuelle in extreme_E and board[position_actuelle-6]['W'] == True:
+#             destination = position_actuelle  -6
+#     return destination
 
 def decider_gate():
     gate_possible = ['A','B','C','D','E','F','G','H','I','J','K','L']
