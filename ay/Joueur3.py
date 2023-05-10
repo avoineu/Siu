@@ -19,26 +19,24 @@ def decider_position(board, position_actuelle):
     destination = position_actuelle
     extreme_W = [0,7,14,21,28,35,42]
     extreme_E = [6,13,20,27,34,41,48]
-    if board[position_actuelle]['N'] == True :
-        if position_actuelle >= 7 and board[position_actuelle-7]['S'] == True :
-            destination = position_actuelle -7
-        elif position_actuelle < 7 and board[position_actuelle+42]['S'] == True :
-            destination = position_actuelle +42
-    elif board[position_actuelle]['S'] == True : 
-        if position_actuelle <= 41 and board[position_actuelle+7]['N'] == True :
-            destination = position_actuelle +7
-        elif  board[position_actuelle]['S'] == True and position_actuelle > 41 and board[position_actuelle-42]['N'] == True:
-            destination = position_actuelle -42
-    elif board[position_actuelle]['W'] == True :
-        if position_actuelle not in extreme_W and board[position_actuelle-1]['E'] == True :
-            destination = position_actuelle -1
-        elif position_actuelle in extreme_W and board[position_actuelle+6]['E'] == True:
-            destination = position_actuelle +6
-    elif board[position_actuelle]['E'] == True :
-        if position_actuelle not in extreme_E and board[position_actuelle+1]['W'] == True :
-            destination = position_actuelle +1
-        elif position_actuelle in extreme_E and board[position_actuelle-6]['W'] == True:
-            destination = position_actuelle  -6
+    if board[position_actuelle]['N'] == True and position_actuelle >= 7 and board[position_actuelle-7]['S'] == True : 
+        destination = position_actuelle -7
+    elif board[position_actuelle]['N'] == True and position_actuelle < 7 and board[position_actuelle+42]['S'] == True :
+        destination = position_actuelle +42
+    elif board[position_actuelle]['S'] == True and position_actuelle <= 41 and board[position_actuelle+7]['N'] == True  : 
+        destination = position_actuelle +7
+    elif  board[position_actuelle]['S'] == True and position_actuelle > 41 and board[position_actuelle-42]['N'] == True:
+        destination = position_actuelle -42
+    elif board[position_actuelle]['W'] == True and position_actuelle not in extreme_W and board[position_actuelle-1]['E'] == True:
+        destination = position_actuelle -1
+    elif board[position_actuelle]['W'] == True and  position_actuelle in extreme_W and board[position_actuelle+6]['E'] == True:
+        destination = position_actuelle +6
+    elif board[position_actuelle]['E'] == True and position_actuelle not in extreme_E and board[position_actuelle+1]['W'] == True :
+        destination = position_actuelle +1
+    elif board[position_actuelle]['E'] == True and position_actuelle in extreme_E and board[position_actuelle-6]['W'] == True:
+        destination = position_actuelle  -6
+    else :
+        destination = position_actuelle
     return destination
 
 def decider_gate():
