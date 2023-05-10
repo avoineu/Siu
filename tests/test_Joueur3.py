@@ -1,10 +1,7 @@
-import pytest
 import Joueur3 
 import json
 from unittest.mock import patch
-import socket 
 import unittest
-import Joueur3
 
 def test_decider_gate():
     result = Joueur3.decider_gate()

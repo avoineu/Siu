@@ -18,32 +18,60 @@ def move(tuile, board, position_actuelle) :
     print(jouer)
     return jouer
 
+
 def decider_position(board, position_actuelle):
-    directions = ['N', 'E', 'S', 'W']
-    random.shuffle(directions)
-    for direction in directions:
-        if board[position_actuelle][direction] and not is_wall(position_actuelle, direction):
-            if direction == 'N':
-                return position_actuelle - 7
-            elif direction == 'E':
-                return position_actuelle + 1
-            elif direction == 'S':
-                return position_actuelle + 7
-            elif direction == 'W':
-                return position_actuelle - 1
-    return position_actuelle  # ne bouge pas si toutes les directions sont bloquées par des murs
+    extreme_W = [0,7,14,21,28,35,42]
+    extreme_E = [6,13,20,27,34,41,48]
+    directions = []
+    if board[position_actuelle]['N'] == True and position_actuelle >= 7 and board[position_actuelle-7]['S'] == True : 
+        directions.append(position_actuelle -7)
+    if board[position_actuelle]['N'] == True and position_actuelle < 7 and board[position_actuelle+42]['S'] == True :
+        directions.append(position_actuelle +42)
+    if board[position_actuelle]['S'] == True and position_actuelle <= 41 and board[position_actuelle+7]['N'] == True  : 
+        directions.append(position_actuelle +7)
+    if  board[position_actuelle]['S'] == True and position_actuelle > 41 and board[position_actuelle-42]['N'] == True:
+        directions.append(position_actuelle -42)
+    if board[position_actuelle]['W'] == True and position_actuelle not in extreme_W and board[position_actuelle-1]['E'] == True:
+        directions.append(position_actuelle -1)
+    if board[position_actuelle]['W'] == True and  position_actuelle in extreme_W and board[position_actuelle+6]['E'] == True:
+        directions.append(position_actuelle +6)
+    if board[position_actuelle]['E'] == True and position_actuelle not in extreme_E and board[position_actuelle+1]['W'] == True :
+        directions.append(position_actuelle +1)
+    if board[position_actuelle]['E'] == True and position_actuelle in extreme_E and board[position_actuelle-6]['W'] == True:
+        directions.append(position_actuelle  -6)
+
+    if len(directions) == 0:
+        destination = position_actuelle
+    else:
+        destination = random.choice(directions)
+
+    return destination
+# def decider_position(board, position_actuelle):
+#     directions = ['N', 'E', 'S', 'W']
+#     random.shuffle(directions)
+#     for direction in directions:
+#         if board[position_actuelle][direction] and not is_wall(position_actuelle, direction):
+#             if direction == 'N':
+#                 return position_actuelle - 7
+#             elif direction == 'E':
+#                 return position_actuelle + 1
+#             elif direction == 'S':
+#                 return position_actuelle + 7
+#             elif direction == 'W':
+#                 return position_actuelle - 1
+#     return position_actuelle  # ne bouge pas si toutes les directions sont bloquées par des murs
 
 
-def is_wall(position, direction):
-    if direction == 'N' and position < 7:
-        return True
-    elif direction == 'E' and position % 7 == 6:
-        return True
-    elif direction == 'S' and position > 41:
-        return True
-    elif direction == 'W' and position % 7 == 0:
-        return True
-    return False
+# def is_wall(position, direction):
+#     if direction == 'N' and position < 7:
+#         return True
+#     elif direction == 'E' and position % 7 == 6:
+#         return True
+#     elif direction == 'S' and position > 41:
+#         return True
+#     elif direction == 'W' and position % 7 == 0:
+#         return True
+#     return False
 
 # def decider_position(board, position_actuelle):
 #     destination = position_actuelle
